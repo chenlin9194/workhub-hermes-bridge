@@ -1,0 +1,10 @@
+node_modules/
+.env
+.env.*
+config/bridge.env
+*.log
+
+# Never commit Hermes user configuration or local WorkHub data.
+.hermes/
+*.db
+*.db-journal
