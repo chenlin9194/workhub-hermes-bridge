@@ -40,6 +40,20 @@ function Get-RequiredConfigValue {
   return $Config[$Name]
 }
 
+function Get-ConfigValueOrDefault {
+  param(
+    [Parameter(Mandatory)][hashtable]$Config,
+    [Parameter(Mandatory)][string]$Name,
+    [Parameter(Mandatory)][string]$DefaultValue
+  )
+
+  if (-not $Config.ContainsKey($Name) -or [string]::IsNullOrWhiteSpace($Config[$Name])) {
+    return $DefaultValue
+  }
+
+  return $Config[$Name]
+}
+
 function ConvertTo-BashSingleQuoted {
   param([Parameter(Mandatory)][string]$Value)
   $escapedQuote = "'`"'`"'"

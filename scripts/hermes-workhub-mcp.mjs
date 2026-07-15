@@ -146,10 +146,11 @@ const milestoneCreateSchema = {
   sortOrder: z.number().optional(),
 };
 
-const server = new McpServer({
-  name: "workhub",
-  version: "1.0.0",
-});
+export function createWorkHubMcpServer() {
+  const server = new McpServer({
+    name: "workhub",
+    version: "1.0.0",
+  });
 
 registerWorkHubTool(
   server,
@@ -521,5 +522,10 @@ registerWorkHubTool(
   }
 );
 
-const transport = new StdioServerTransport();
-await server.connect(transport);
+  return server;
+}
+
+if (process.argv[1] && import.meta.url === new URL(process.argv[1], "file:").href) {
+  const transport = new StdioServerTransport();
+  await createWorkHubMcpServer().connect(transport);
+}

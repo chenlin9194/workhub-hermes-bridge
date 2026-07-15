@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "mcp": "node scripts/hermes-workhub-mcp.mjs",
-    "check": "node --check scripts/hermes-workhub-mcp.mjs"
+    "mcp:http": "node scripts/hermes-workhub-mcp-http.mjs",
+    "check": "node --check scripts/hermes-workhub-mcp.mjs && node --check scripts/hermes-workhub-mcp-http.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
