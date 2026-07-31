@@ -54,6 +54,18 @@ function Get-ConfigValueOrDefault {
   return $Config[$Name]
 }
 
+function Get-WorkHubHealthBaseUrl {
+  param([Parameter(Mandatory)][hashtable]$Config)
+
+  if ($Config.ContainsKey("WORKHUB_WINDOWS_BASE_URL") -and -not [string]::IsNullOrWhiteSpace($Config["WORKHUB_WINDOWS_BASE_URL"])) {
+    return $Config["WORKHUB_WINDOWS_BASE_URL"]
+  }
+
+  # Backward compatibility: older single-URL configurations used the same
+  # address for Windows health and the WSL Bridge.
+  return Get-RequiredConfigValue -Config $Config -Name "WORKHUB_BASE_URL"
+}
+
 function ConvertTo-BashSingleQuoted {
   param([Parameter(Mandatory)][string]$Value)
   $escapedQuote = "'`"'`"'"
@@ -88,7 +100,7 @@ function Invoke-HermesWsl {
 function Test-WorkHubHealth {
   param([Parameter(Mandatory)][hashtable]$Config)
 
-  $baseUrl = (Get-RequiredConfigValue -Config $Config -Name "WORKHUB_BASE_URL").TrimEnd("/")
+  $baseUrl = (Get-WorkHubHealthBaseUrl -Config $Config).TrimEnd("/")
   $token = Get-RequiredConfigValue -Config $Config -Name "HERMES_WORKHUB_TOKEN"
   $expectedCountText = Get-RequiredConfigValue -Config $Config -Name "WORKHUB_EXPECTED_TOOL_COUNT"
   $expectedCount = [int]$expectedCountText

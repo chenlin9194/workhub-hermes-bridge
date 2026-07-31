@@ -40,7 +40,16 @@ Changing this setting affects only that computer's private configuration. It doe
 Copy-Item .\config\bridge.env.example .\config\bridge.env
 ```
 
-4. Edit `config\bridge.env` with the WorkHub address, the same token used by WorkHub, and the WSL Hermes user. Keep `HERMES_MCP_TRANSPORT=stdio`.
+4. Edit `config\bridge.env` with the same token used by WorkHub and the WSL Hermes user. For a WorkHub server running on Windows, configure both addresses:
+
+```text
+WORKHUB_BASE_URL=http://<Windows-host-gateway>:3000
+WORKHUB_WINDOWS_BASE_URL=http://127.0.0.1:3000
+```
+
+`WORKHUB_BASE_URL` is injected into the WSL stdio Bridge. `WORKHUB_WINDOWS_BASE_URL` is used by the Windows-side health check in `doctor.ps1` and `install.ps1`. Keep `HERMES_MCP_TRANSPORT=stdio`.
+
+When WorkHub runs on Windows and Hermes runs in WSL, the WorkHub production server must listen on a non-loopback interface (for example `0.0.0.0`) so the WSL host-gateway address can reach it.
 5. Register and validate Hermes:
 
 ```powershell
