@@ -239,9 +239,10 @@ registerWorkHubTool(
 registerWorkHubTool(
   server,
   "create_work_item_with_actions",
-  "Create a WorkHub work item and optional action items under it.",
+  "Create a WorkHub work item and optional action items under it. operationId is required and comes from WRITE_PREVIEW; reuse the same operationId for every retry of the same confirmed operation, including after a timeout. Never generate a new operationId for a retry, and never reuse one operationId for a different payload.",
   {
     ...projectLookupSchema,
+    operationId: z.string().trim().min(1).max(256).describe("Required idempotency key from WRITE_PREVIEW. Reuse this exact value for all retries of the same confirmed operation, including after timeout; never use it for a different payload."),
     title: z.string(),
     description: z.string().optional(),
     module: z.string().optional(),
